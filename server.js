@@ -10,6 +10,7 @@ import emergencyRoutes from "./src/routes/emergencyRoutes.js";
 
 import adminRoutes from "./src/routes/adminRoutes.js";
 import agencyRoutes from "./src/routes/agencyRoutes.js";
+
 import cors from "cors";
 
 import {
@@ -23,16 +24,35 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-//updates cores:
+
+/* =========================
+   ✅ UPDATED CORS CONFIG
+   ========================= */
+const allowedOrigins = [
+  "http://localhost:3000",        // Next.js dev
+  "http://localhost:5173",        // Vite dev
+  "https://your-frontend.vercel.app", // Production (future)
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (Postman, server-to-server)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
-
-// ROUTES
+/* =========================
+   ROUTES
+   ========================= */
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
@@ -41,7 +61,10 @@ app.use("/api/emergency", emergencyRoutes);
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/agency", agencyRoutes);
-// ERROR HANDLING
+
+/* =========================
+   ERROR HANDLING
+   ========================= */
 app.use(notFound);
 app.use(errorHandler);
 
