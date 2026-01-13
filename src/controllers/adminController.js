@@ -35,8 +35,25 @@ export const getPendingAgencies = async (req, res) => {
   try {
     const agencies = await User.find({
       role: "AGENCY_ADMIN",
-      approvalStatus: "pending",   // ✅ NEW primary filter
-      isApproved: false,           // ✅ backward compatibility
+      approvalStatus: "pending", // ✅ primary filter
+      isApproved: false,         // ✅ backward compatibility
+    }).select("-password");
+
+    res.status(200).json(agencies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// =================================
+// ✅ NEW: GET ALL APPROVED AGENCIES
+// =================================
+export const getAllAgencies = async (req, res) => {
+  try {
+    const agencies = await User.find({
+      role: "AGENCY_ADMIN",
+      approvalStatus: "approved",
+      isApproved: true,
     }).select("-password");
 
     res.status(200).json(agencies);

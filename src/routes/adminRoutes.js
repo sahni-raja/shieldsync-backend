@@ -2,6 +2,7 @@ import express from "express";
 import {
   approveAgency,
   getPendingAgencies,
+  getAllAgencies, // ✅ NEW import
 } from "../controllers/adminController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
@@ -29,23 +30,23 @@ router.put(
 );
 
 /* =================================
-   ✅ NEW: GENERIC AGENCY FETCH API
-   Supports: ?status=pending
+   ✅ UPDATED: GENERIC AGENCY FETCH API
+   Supports:
+   - /agencies              → approved agencies
+   - /agencies?status=pending → pending agencies
    ================================= */
 router.get(
   "/agencies",
   protect,
   authorizeRoles("SUPER_ADMIN"),
-  async (req, res, next) => {
+  (req, res, next) => {
     // If status=pending → reuse existing controller
     if (req.query.status === "pending") {
       return getPendingAgencies(req, res, next);
     }
 
-    // Future extension placeholder
-    return res.status(400).json({
-      message: "Unsupported agency query",
-    });
+    // ✅ DEFAULT: return approved agencies
+    return getAllAgencies(req, res, next);
   }
 );
 
