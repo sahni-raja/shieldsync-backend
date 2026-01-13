@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 
+// ================================
 // APPROVE AGENCY (SUPER_ADMIN only)
+// ================================
 export const approveAgency = async (req, res) => {
   try {
     const agency = await User.findById(req.params.id);
@@ -9,7 +11,12 @@ export const approveAgency = async (req, res) => {
       return res.status(404).json({ message: "Agency not found" });
     }
 
+    // ✅ KEEP existing logic
     agency.isApproved = true;
+
+    // ✅ NEW: update approval status
+    agency.approvalStatus = "approved";
+
     await agency.save();
 
     res.status(200).json({
@@ -21,12 +28,15 @@ export const approveAgency = async (req, res) => {
   }
 };
 
+// =================================
 // GET ALL PENDING AGENCIES
+// =================================
 export const getPendingAgencies = async (req, res) => {
   try {
     const agencies = await User.find({
       role: "AGENCY_ADMIN",
-      isApproved: false,
+      approvalStatus: "pending",   // ✅ NEW primary filter
+      isApproved: false,           // ✅ backward compatibility
     }).select("-password");
 
     res.status(200).json(agencies);

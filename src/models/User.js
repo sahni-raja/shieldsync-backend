@@ -14,10 +14,26 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
+    /* =========================
+       EXISTING APPROVAL FLAG
+       (KEPT SAFE)
+       ========================= */
     isApproved: {
       type: Boolean,
       default: function () {
         return this.role === "CLIENT" || this.role === "SUPER_ADMIN";
+      },
+    },
+
+    /* =========================
+       ✅ NEW: AGENCY APPROVAL STATUS
+       ========================= */
+    approvalStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: function () {
+        if (this.role === "AGENCY_ADMIN") return "pending";
+        return "approved";
       },
     },
 
@@ -29,12 +45,18 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+/* =========================
+   PASSWORD HASHING
+   ========================= */
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
+/* =========================
+   PASSWORD MATCH
+   ========================= */
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return bcrypt.compare(enteredPassword, this.password);
 };
