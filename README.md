@@ -1,17 +1,17 @@
 # 🛡️ ShieldSync – Private Security Services Platform (Backend)
 
-## 🚧 Project Status
+##  Project Status
 This project is currently under active development.
 
-- ✅ Backend services: Completed (Phase 1)
-- 🛠️ Frontend (Mobile App & Web Dashboard): In progress
-- 📝 About & documentation: Being updated
+-  Backend services: Completed (Phase 1)
+-  Frontend (Mobile App & Web Dashboard): In progress
+-  About & documentation: Being updated
 
-> 📌 Note: This repository currently contains **backend implementation only**.
+>  Note: This repository currently contains **backend implementation only**.
 
 ---
 
-## 🧠 About the Project
+##  About the Project
 ShieldSync is a private security services platform designed to provide
 on-demand and subscription-based high-end security solutions, including:
 
@@ -23,7 +23,7 @@ The platform focuses on **security, scalability, and fair service allocation**.
 
 ---
 
-## ⚙️ Current Scope (Backend)
+##  Current Scope (Backend)
 
 - User & agency management
 - JWT-based authentication & authorization
@@ -40,7 +40,7 @@ The platform focuses on **security, scalability, and fair service allocation**.
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 **Backend**
 - Node.js
@@ -72,13 +72,13 @@ backend/
 
 ---
 
-## 📌 Ethical Note
+##  Ethical Note
 This project is developed for **learning, portfolio, and real-world system design purposes**.
 The architecture is inspired by real private-security service workflows.
 
 ---
 
 ## 👨‍💻 Author
-**Raja Kumar Sahni**  
+**Raja Kumar**  
 B.Tech – Computer Science & Engineering  
 ---
