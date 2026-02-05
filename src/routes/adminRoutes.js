@@ -2,18 +2,13 @@ import express from "express";
 import {
   approveAgency,
   getPendingAgencies,
-  getAllAgencies, // ✅ NEW import
+  getAllAgencies, 
 } from "../controllers/adminController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
-/* =================================
-   EXISTING ROUTES (KEPT SAFE)
-   ================================= */
-
-// Get all pending agencies (legacy / direct)
 router.get(
   "/agencies/pending",
   protect,
@@ -21,7 +16,6 @@ router.get(
   getPendingAgencies
 );
 
-// Approve agency
 router.put(
   "/agency/:id/approve",
   protect,
@@ -29,23 +23,15 @@ router.put(
   approveAgency
 );
 
-/* =================================
-   ✅ UPDATED: GENERIC AGENCY FETCH API
-   Supports:
-   - /agencies              → approved agencies
-   - /agencies?status=pending → pending agencies
-   ================================= */
 router.get(
   "/agencies",
   protect,
   authorizeRoles("SUPER_ADMIN"),
   (req, res, next) => {
-    // If status=pending → reuse existing controller
     if (req.query.status === "pending") {
       return getPendingAgencies(req, res, next);
     }
 
-    // ✅ DEFAULT: return approved agencies
     return getAllAgencies(req, res, next);
   }
 );
