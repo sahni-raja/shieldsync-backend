@@ -25,9 +25,6 @@ const app = express();
 
 app.use(express.json());
 
-/* =========================
-   ✅ UPDATED CORS CONFIG
-   ========================= */
 const allowedOrigins = [
   "http://localhost:3000",        // Next.js dev
   "http://localhost:5173",        // Vite dev
@@ -37,22 +34,25 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (Postman, server-to-server)
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".onrender.com")
+      ) {
+        return callback(null, true);
       }
+
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
   })
 );
 
-/* =========================
-   ROUTES
-   ========================= */
+app.get("/", (req, res) => {
+  res.send("ShieldSync Backend is running 🚀");
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
@@ -62,9 +62,6 @@ app.use("/api/emergency", emergencyRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/agency", agencyRoutes);
 
-/* =========================
-   ERROR HANDLING
-   ========================= */
 app.use(notFound);
 app.use(errorHandler);
 
