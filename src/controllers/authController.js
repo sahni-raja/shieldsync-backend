@@ -2,7 +2,6 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-/* ---------- JWT TOKEN GENERATOR ---------- */
 const generateToken = (id, role) => {
   const expiresIn = process.env.JWT_EXPIRES_IN || "7d";
 
@@ -11,15 +10,10 @@ const generateToken = (id, role) => {
   });
 };
 
-
-/* =========================================================
-   REGISTER USER
-========================================================= */
 export const registerUser = async (req, res) => {
   try {
     const { name, email, phone, password, role } = req.body;
 
-    // 🚫 Block public security registration
     if (role === "SECURITY") {
       return res.status(403).json({
         message: "Security personnel must be created by an agency",
@@ -64,20 +58,15 @@ export const registerUser = async (req, res) => {
   }
 };
 
-/* =========================================================
-   LOGIN USER  🔍 DEBUG ENABLED (SAFE)
-========================================================= */
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 🔍 DEBUG LOGS (TEMPORARY)
     console.log("📧 Email received:", email);
     console.log("🔑 Password received:", password);
 
     const user = await User.findOne({ email });
 
-    // 🔍 DEBUG LOG
     console.log("👤 User found:", user);
 
     if (!user) {
@@ -94,7 +83,6 @@ export const loginUser = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
 
-    // 🔍 DEBUG LOG
     console.log("🔐 Password match result:", isMatch);
 
     if (!isMatch) {
