@@ -8,7 +8,9 @@ This project is currently under active development.
 -  About & documentation: Being updated
 
 >  Note: This repository currently contains **backend implementation only**.
-
+---
+## Backend Live
+https://shieldsync-backend-3x2p.onrender.com
 ---
 
 ##  About the Project
