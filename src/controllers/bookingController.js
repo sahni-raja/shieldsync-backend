@@ -1,8 +1,5 @@
 import Booking from "../models/Booking.js";
 
-/* =========================================================
-   CREATE BOOKING (CLIENT)
-========================================================= */
 export const createBooking = async (req, res) => {
   try {
     const { serviceType, bookingDate, durationHours } = req.body;
@@ -23,9 +20,6 @@ export const createBooking = async (req, res) => {
   }
 };
 
-/* =========================================================
-   GET CLIENT BOOKINGS
-========================================================= */
 export const getMyBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ client: req.user.id })
@@ -37,10 +31,6 @@ export const getMyBookings = async (req, res) => {
   }
 };
 
-/* =========================================================
-   GET ALL BOOKINGS (ADMIN)
-   SUPER_ADMIN / AGENCY_ADMIN
-========================================================= */
 export const getAllBookings = async (req, res) => {
   try {
     const bookings = await Booking.find()
